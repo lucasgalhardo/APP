@@ -1,1 +1,6 @@
-console.log("hello world!");
+const Start = () =>
+{
+    console.log('começou');
+}
+
+Start();
