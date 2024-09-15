@@ -2,7 +2,7 @@ const { select, input, checkbox } = require('@inquirer/prompts');
 
 let metas = [];
 
-const CadastrarMeta = async () => {
+const cadastrarMeta = async () => {
     const meta = await input({ message: 'Digite a meta:'});
 
     if (meta.length == 0) {
@@ -14,7 +14,7 @@ const CadastrarMeta = async () => {
 
 }
 
-const ListarMetas = async () => {
+const listarMetas = async () => {
     const respostas = await checkbox( {
         message: "Use as Setas para mudar de meta, o Espaço para marcar ou desmarcar e o Enter para finalzar essa etapa",
         choices: [...metas],
@@ -41,6 +41,22 @@ const ListarMetas = async () => {
     console.log('Meta(s) marcadas como concluída(s)');
 }
 
+const metasRealizadas = async () => {
+    const realizadas = metas.filter((meta) => {
+        return meta.checked;
+    })
+
+    if (realizadas.length == 0) {
+        console.log("Não existem metas realizadas!"); 
+        return;
+    }
+
+    await select({
+        message: "Metas realizadas",
+        choices: [...realizadas]
+    })
+}
+
 const Start = async () =>
 {
     while (true) 
@@ -58,6 +74,10 @@ const Start = async () =>
                     value: "listar"
                 },
                 {
+                    name: "Metas realizadas",
+                    value: "realizadas"
+                },
+                {
                     name: "Sair",
                     value: "sair"
                 }
@@ -67,11 +87,14 @@ const Start = async () =>
         switch (opcao)
         {
             case "cadastrar":
-                await CadastrarMeta();
+                await cadastrarMeta();
                 break;
             case "listar":
-                await ListarMetas();
-                break;        
+                await listarMetas();
+                break;    
+            case "realizadas":
+                await metasRealizadas();
+                break;
             default:
             case "sair":    
                 console.log('Saindo...');
